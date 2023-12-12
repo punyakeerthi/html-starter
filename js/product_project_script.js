@@ -3,6 +3,17 @@ $(document).ready(function() {
 
      loadOrders();
 
+      
+
+      $("#orderTable").on("keyup", ".order-id,.order-value,.quantity", function() {
+
+            var row =$(this).closest("tr");     
+             $(this).closest("tr").find(".order-id-err").text("");
+             $(this).closest("tr").find(".order-value-err").text("");
+             $(this).closest("tr").find(".quantity-err").text("");
+        
+      });
+
          // Add Order
     $("#addOrderBtn").on("click", function () {
            addNewEmptyOrderRow();
@@ -24,6 +35,8 @@ $(document).ready(function() {
         var row =$(this).closest("tr");
         editOrderDataRow(row);
          $('#addOrderBtn').prop('disabled', true);
+          $('.editActionBtn').prop('disabled', true);
+           $('.deleteActionBtn').prop('disabled', true);
       });
 
         $("#orderTable").on("click", ".saveActionBtn", function() {
@@ -51,9 +64,9 @@ $(document).ready(function() {
   function addNewEmptyOrderRow() {
         // Add a new row with input fields
         var newRow = $("<tr>");
-        newRow.append("<td><input type='text' class='order-id'></td>");
-        newRow.append("<td><input type='text' class='order-value'></td>");
-        newRow.append("<td><input type='text' class='quantity'></td>");
+        newRow.append("<td><input type='text' class='order-id'><br><span style='color: red;'' class='order-id-err'> </span> </td> ");
+        newRow.append("<td><input type='text' class='order-value'> <br><span style='color: red;'' class='order-value-err'></td>");
+        newRow.append("<td><input type='text' class='quantity'> <br><span style='color: red;'' class='quantity-err'></td>");
         //newRow.append("<td><input type='text' class='amount'></td>");
         newRow.append("<td><button class='addActionBtn btn btn-sm btn-primary'>Add</button></td>");
 
@@ -89,9 +102,9 @@ $(document).ready(function() {
             
 
          var editRow = $("<tr>");  
-        editRow.append("<td><input type='text' class='order-id' value='"+ orderId +"'></td>");
-        editRow.append("<td><input type='text' class='order-value' value='"+ orderValue +"'></td>");
-        editRow.append("<td><input type='text' class='quantity' value='"+ quantity +"'></td>");
+        editRow.append("<td><input type='text' class='order-id' value='"+ orderId +"' disabled> <br><span style='color: red;'' class='order-id-err'> </span></td>");
+        editRow.append("<td><input type='text' class='order-value' value='"+ orderValue +"'> <br><span style='color: red;'' class='order-value-err'></td>");
+        editRow.append("<td><input type='text' class='quantity' value='"+ quantity +"'> <br><span style='color: red;'' class='quantity-err'></td>");
       //  editRow.append("<td><input type='text' class='amount' value='"+ amount +"'></td>");
         editRow.append("<td><button class='saveActionBtn btn btn-sm btn-primary'>Save</button></td>");
 
@@ -196,17 +209,18 @@ $(document).ready(function() {
 
                 // Check if the value is empty
                 if (orderId === "") { 
-                    alert("Please enter orderId!"); 
+                   // alert("Please enter orderId!"); 
+                    row.find(".order-id-err").text("Please enter orderId!");
                     return false;
                 }
 
                 
                 if (orderValue === "") { 
-                    alert("Please enter Order Value!"); 
+                    row.find(".order-value-err").text("Please enter Order Value!"); 
                     return false;
                 }
                 if (quantity === "") { 
-                    alert("Please enter quantity!"); 
+                    row.find(".quantity-err").text("Please enter quantity!"); 
                     return false;
                 }
               /*  if (amount === "") { 
@@ -234,7 +248,7 @@ $(document).ready(function() {
                 });
                  if(filteredOrders.length > 0)
                  {
-                    alert("Order ID "+orderId+" already exist");
+                    row.find(".order-id-err").text("Order ID "+orderId+" already exist");
                     return false;
                  }
 
@@ -300,6 +314,8 @@ $(document).ready(function() {
 
             // Initial update to display the default value
             updateValueDisplay();
+
+
 
 
 
